@@ -1,11 +1,11 @@
-const chaiHttp = require('chai-http');
-const chai = require('chai');
+const chaiHttp = require("chai-http");
+const chai = require("chai");
 const assert = chai.assert;
-const server = require('../server');
+const server = require("../server");
 
 chai.use(chaiHttp);
 
-suite('Functional Tests', function() {
+suite("Functional Tests", function () {
   test("Create an issue with every field", function (done) {
     chai
       .request(server)
@@ -31,7 +31,9 @@ suite('Functional Tests', function() {
         assert.property(res.body, "status_text");
         done();
       });
-  });test("Create an issue with only required fields", function (done) {
+  });
+
+  test("Create an issue with only required fields", function (done) {
     chai
       .request(server)
       .post("/api/issues/test")
@@ -54,7 +56,9 @@ suite('Functional Tests', function() {
         assert.property(res.body, "status_text");
         done();
       });
-  });test("Create an issue with missing required fields", function (done) {
+  });
+
+  test("Create an issue with missing required fields", function (done) {
     chai
       .request(server)
       .post("/api/issues/test")
@@ -68,7 +72,9 @@ suite('Functional Tests', function() {
         assert.equal(res.body.error, "required field(s) missing");
         done();
       });
-  });test("View issues on a project", function (done) {
+  });
+
+  test("View issues on a project", function (done) {
     chai
       .request(server)
       .get("/api/issues/test")
@@ -86,7 +92,9 @@ suite('Functional Tests', function() {
         assert.property(res.body[0], "status_text");
         done();
       });
-  });test("View issues on a project with one filter", function (done) {
+  });
+
+  test("View issues on a project with one filter", function (done) {
     chai
       .request(server)
       .get("/api/issues/test?open=true")
@@ -98,7 +106,9 @@ suite('Functional Tests', function() {
         });
         done();
       });
-  });test("View issues on a project with multiple filters", function (done) {
+  });
+
+  test("View issues on a project with multiple filters", function (done) {
     chai
       .request(server)
       .get("/api/issues/test?open=true&assigned_to=Chai%20and%20Mocha")
@@ -111,7 +121,9 @@ suite('Functional Tests', function() {
         });
         done();
       });
-  });test("Update one field on an issue", function (done) {
+  });
+
+  test("Update one field on an issue", function (done) {
     let issueId;
     chai
       .request(server)
@@ -140,7 +152,9 @@ suite('Functional Tests', function() {
             done();
           });
       });
-  });test("Update multiple fields on an issue", function (done) {
+  });
+
+  test("Update multiple fields on an issue", function (done) {
     let issueId;
     chai
       .request(server)
@@ -170,7 +184,9 @@ suite('Functional Tests', function() {
             done();
           });
       });
-  });test("Update an issue with missing _id", function (done) {
+  });
+
+  test("Update an issue with missing _id", function (done) {
     chai
       .request(server)
       .put("/api/issues/test")
@@ -184,7 +200,9 @@ suite('Functional Tests', function() {
         assert.equal(res.body.error, "missing _id");
         done();
       });
-  });test("Update an issue with no fields to update", function (done) {
+  });
+
+  test("Update an issue with no fields to update", function (done) {
     let issueId;
     chai
       .request(server)
@@ -210,7 +228,9 @@ suite('Functional Tests', function() {
             done();
           });
       });
-  });test("Update an issue with an invalid _id", function (done) {
+  });
+
+  test("Update an issue with an invalid _id", function (done) {
     chai
       .request(server)
       .put("/api/issues/test")
@@ -225,7 +245,9 @@ suite('Functional Tests', function() {
         assert.equal(res.body.error, "could not update");
         done();
       });
-  });test("Delete an issue", function (done) {
+  });
+
+  test("Delete an issue", function (done) {
     let issueId;
     chai
       .request(server)
@@ -253,7 +275,9 @@ suite('Functional Tests', function() {
             done();
           });
       });
-  });test("Delete an issue with an invalid _id", function (done) {
+  });
+
+  test("Delete an issue with an invalid _id", function (done) {
     chai
       .request(server)
       .delete("/api/issues/test")
@@ -267,7 +291,9 @@ suite('Functional Tests', function() {
         assert.equal(res.body.error, "could not delete");
         done();
       });
-  });test("Delete an issue with missing _id", function (done) {
+  });
+
+  test("Delete an issue with missing _id", function (done) {
     chai
       .request(server)
       .delete("/api/issues/test")
