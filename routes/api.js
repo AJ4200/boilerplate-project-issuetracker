@@ -3,17 +3,16 @@
 const mongoose = require("mongoose");
 
 module.exports = function (app) {
-  // DB Connection & Schema layout
+  //DB Connection & Schema layout
   mongoose.connect(process.env.DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
     useUnifiedTopology: true,
   });
-
   const issueModel = require("../models/issue");
 
-  // Routes
+  //Routes
   app
     .route("/api/issues/:project")
 
@@ -65,7 +64,6 @@ module.exports = function (app) {
         created_by: created_by,
         created_on: new Date(),
         updated_on: new Date(),
-        open: true,
         project: project,
       });
 
@@ -92,33 +90,33 @@ module.exports = function (app) {
       let flag = false;
 
       if (Object.keys(obj).length === 0) {
+        flag = true;
         return res.json({ error: "missing _id" });
       } else if (Object.keys(obj).length === 1 && obj._id) {
+        flag = true;
         return res.json({ error: "no update field(s) sent", _id: obj._id });
       } else if (Object.keys(obj).length >= 2 && obj._id) {
+        flag = true;
         obj.updated_on = new Date();
 
         issueModel
-          .findByIdAndUpdate(obj._id, obj, { new: true })
+          .findByIdAndUpdate(obj._id, obj)
           .exec()
           .then((data) => {
             if (data)
               return res.json({ result: "successfully updated", _id: obj._id });
             else return res.json({ error: "could not update", _id: obj._id });
           })
-          .catch((err) => {
-            console.log(err);
-            return res.json({ error: "could not update", _id: obj._id });
-          });
-      } else {
-        return res.json({ error: "could not update", _id: obj._id });
+          .catch((err) => console.log(err));
       }
+
+      if (!flag) return res.json({ error: "could not update", _id: obj._id });
     })
 
     .delete(function (req, res) {
       let project = req.params.project;
       let obj = Object.assign(req.body);
-
+      //console.log(obj)
       if (!obj._id) return res.json({ error: "missing _id" });
       else {
         issueModel
@@ -129,10 +127,7 @@ module.exports = function (app) {
               res.json({ result: "successfully deleted", _id: obj._id });
             else res.json({ error: "could not delete", _id: obj._id });
           })
-          .catch((err) => {
-            console.log(err);
-            return res.json({ error: "could not delete", _id: obj._id });
-          });
+          .catch((err) => console.log(err));
       }
     });
 };
