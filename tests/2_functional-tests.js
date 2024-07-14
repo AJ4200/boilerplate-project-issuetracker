@@ -61,7 +61,6 @@ suite("Functional Tests", function () {
         })
         .end((err, res) => {
           assert.equal(res.body.error, "required field(s) missing");
-          //assert.deepEqual(res.body, {error: 'required field(s) missing'})
           done();
         });
     });
@@ -106,7 +105,7 @@ suite("Functional Tests", function () {
       chai
         .request(server)
         .get("/api/issues/apitest")
-        .query({ created_by: "Sam" }, { open: true })
+        .query({ created_by: "Sam", open: true })
         .end((err, res) => {
           assert.isArray(res.body, "is array");
           res.body.forEach((issue) => {
@@ -125,7 +124,6 @@ suite("Functional Tests", function () {
         .put("/api/issues/apitest")
         .send({ _id: "60f1e7716e4fbb24fcd38dc0", created_by: "Sam" })
         .end((err, res) => {
-          //assert.deepEqual(res.body, {result: 'successfully updated', '_id': '60f1e7716e4fbb24fcd38dc0'})
           assert.equal(res.body.result, "successfully updated");
           assert.equal(res.body._id, "60f1e7716e4fbb24fcd38dc0");
           done();
@@ -142,7 +140,6 @@ suite("Functional Tests", function () {
           issue_text: "Sir",
         })
         .end((err, res) => {
-          //assert.deepEqual(res.body, {result: 'successfully updated', '_id': '60f1e7716e4fbb24fcd38dc0'})
           assert.equal(res.body.result, "successfully updated");
           assert.equal(res.body._id, "60f1e7716e4fbb24fcd38dc0");
           done();
@@ -155,7 +152,6 @@ suite("Functional Tests", function () {
         .put("/api/issues/apitest")
         .send({})
         .end((err, res) => {
-          //assert.deepEqual(res.body, {error: 'missing _id'})
           assert.equal(res.body.error, "missing _id");
           done();
         });
@@ -167,7 +163,6 @@ suite("Functional Tests", function () {
         .put("/api/issues/apitest")
         .send({ _id: "60f1e7716e4fbb24fcd38dc0" })
         .end((err, res) => {
-          //assert.deepEqual(res.body, {error: 'no update field(s) sent', _id: '60f1e7716e4fbb24fcd38dc0'})
           assert.equal(res.body.error, "no update field(s) sent");
           assert.equal(res.body._id, "60f1e7716e4fbb24fcd38dc0");
           done();
@@ -180,7 +175,6 @@ suite("Functional Tests", function () {
         .put("/api/issues/apitest")
         .send({ _id: "60f1bee4521da62c5ccd7641", issue_text: "sam" })
         .end((err, res) => {
-          //assert.deepEqual(res.body, {error: 'could not update', '_id': '60f1bee4521da62c5ccd7641'})
           assert.equal(res.body.error, "could not update");
           assert.equal(res.body._id, "60f1bee4521da62c5ccd7641");
           done();
@@ -188,8 +182,8 @@ suite("Functional Tests", function () {
     });
   });
 
-  suite("Test Delete", () => {
-    test("Test DELETE to delete an issue", async () => {
+  suite("Test DELETE", () => {
+    test("Test DELETE to delete an issue", async (done) => {
       const toDelete = await Issue.findOne({
         issue_title: "to be deleted",
       }).exec();
@@ -198,13 +192,9 @@ suite("Functional Tests", function () {
         .delete("/api/issues/apitest")
         .send({ _id: toDelete._id })
         .end((err, res) => {
-          // assert.deepEqual(res.body, {
-          //     result: 'successfully deleted',
-          //     '_id': ObjectId(toDelete._id).toString()
-          // })
           assert.equal(res.body.result, "successfully deleted");
           assert.equal(res.body._id, ObjectId(toDelete._id).toString());
-          //done()
+          done();
         });
     });
 
@@ -214,7 +204,6 @@ suite("Functional Tests", function () {
         .delete("/api/issues/apitest")
         .send({ _id: "60f1c7cd0e7e0e0a74771d25" })
         .end((err, res) => {
-          //assert.deepEqual(res.body, {error: 'could not delete', '_id': '60f1c7cd0e7e0e0a74771d25'})
           assert.equal(res.body.error, "could not delete");
           assert.equal(res.body._id, "60f1c7cd0e7e0e0a74771d25");
           done();
@@ -228,7 +217,6 @@ suite("Functional Tests", function () {
         .send({})
         .end((err, res) => {
           assert.equal(res.body.error, "missing _id");
-          //assert.deepEqual(res.body, {error: 'missing _id'})
           done();
         });
     });
